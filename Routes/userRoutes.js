@@ -20,7 +20,7 @@ routes.post('/register',async (req,res)=>{
           });
           await user.save();
           return res.status(201).json({
-            success: true,
+            status: true,
             message: "User registered successfully.",
             user: {
               name: user.name,
@@ -38,13 +38,38 @@ routes.post('/check-user',async (req,res)=>{
     try{
         let {email} = req.body;
         const existingUser = await userModel.findOne({email})
-        if(existingUser) return req.status(200).json({
+        if(existingUser) return res.status(200).json({
             status:true,
             message:'Already register'
+        })
+        else return res.status(200).json({
+            status:false,
+            message:'Not Register'
         })
     }catch(err){
         console.log(err)
     }
 })
-
+ routes.post('/login',async (req,res)=>{
+    try{
+        const {email,password} = req.body
+        let user = await userModel.findOne({ email });
+        if (user) {
+      let Hpassword = await comparePass(password, user.password);
+      if (Hpassword) {
+       return res.status(200).send({
+            status: true,
+            message: "Login",
+            user: {
+              id: user._id,
+              name:user.name,
+              email:user.email
+            }})
+      }
+    }
+}
+    catch(err){
+        console.log(err)
+    }
+ })
 export default routes;
