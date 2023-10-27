@@ -66,6 +66,10 @@ routes.post('/check-user',async (req,res)=>{
               email:user.email
             }})
       }
+      else return res.status(404).json({
+        status:false,
+        message:'Please check the password'
+      })
     }
 }
     catch(err){
