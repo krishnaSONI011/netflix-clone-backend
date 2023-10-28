@@ -5,7 +5,7 @@ const moviesSchema = mongoose.Schema({
         type:String,
         require:true
     },
-    thumbnailUrl: {
+    thumbnailURL: {
         type:String,
         require:true
     },

@@ -1,6 +1,7 @@
 import express  from "express";
 import dotenv from 'dotenv';
 import userRouter from './Routes/userRoutes.js'
+import moviesRouter from './Routes/moviesRouter.js'
 import db from './db.js'
 import cors from 'cors'
 const app = express();
@@ -21,4 +22,5 @@ app.get('/',(req,res)=>{
     res.send('Server Running')
 })
 // routes here 
+app.use('/api/movies/',moviesRouter)
 app.use('/api/auth/',userRouter)
