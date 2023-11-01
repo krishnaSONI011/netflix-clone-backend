@@ -1,15 +1,26 @@
 import  Express  from "express";
 import moviesModel from '../Model/moviesModel.js'
 import { slug } from "../Helper/toSlug.js";
+import multer from 'multer'
+import path from 'path'
 const router = Express.Router();
-
-router.post('/add',async (req,res)=>{
+const storage = multer.diskStorage({
+    destination: function (req, res, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        const uniqueName = Date.now() + path.extname(file.originalname);
+        cb(null, uniqueName)
+    }
+})
+const upload = multer({ storage: storage })
+router.post('/add',upload.single('image'),async (req,res)=>{
     try{
-        const {title,thumbnailURL,duration,videoURL,description,category,gerns} = req.body;
+        const {title,duration,videoURL,description,category,gerns} = req.body;
         const movieSlug = slug(category)
         const movie = new moviesModel({
             title,
-            thumbnailURL,
+            thumbnailURL:req.file.path,
             duration,
             videoURL,
             description,
@@ -30,6 +41,8 @@ router.post('/add',async (req,res)=>{
         console.error(err)
     }
 })
+
+
 
 router.get('/get/:category', async (req, res) => {
     try {
@@ -57,4 +70,16 @@ router.get('/get/:category', async (req, res) => {
     }
   });
   
+  // get all data ; 
+  router.get('/get',async (req,res)=>{
+    try{
+        const data = await moviesModel.find({})
+        return res.status(200).json({
+            status:true,
+            data 
+        })
+    }catch(err){
+        console.log(err)
+    }
+  })
 export default router;

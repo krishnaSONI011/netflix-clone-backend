@@ -9,6 +9,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cors())
+app.use('/uploads', express.static('uploads'));
     
 let port = process.env.PORT || 8080;
 
