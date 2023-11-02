@@ -1,6 +1,6 @@
 import express from 'express'
 import userModel from '../Model/userModel.js'
-import { hashpass, comparePass } from "../helper/password.js";
+import { hashpass, comparePass } from "../Helper/password.js";
 
 let routes = express.Router()
 
